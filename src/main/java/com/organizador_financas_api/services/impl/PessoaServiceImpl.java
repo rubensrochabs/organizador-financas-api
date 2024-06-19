@@ -47,7 +47,7 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	public PessoaDto buscarPorId(Long id) {
 		logger.info("[01 - Recuperando pessoa pelo idPessoa: {}]", id);
-		Pessoa pessoa = pessoaRepository.findById(id).orElseThrow(() -> new RuntimeException("Pessoa não encontrado! idPessoa: " + id));
+		Pessoa pessoa = retornarPessoa(id);
 
 		return pessoaMapper.mapearEntidadeParaDto(pessoa);
 	}
@@ -55,7 +55,7 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	public void delete(Long id) {
 		logger.info("[01 - Recuperando pessoa pelo idPessoa: {}]", id);
-		Pessoa pessoa = pessoaRepository.findById(id).orElseThrow(() -> new RuntimeException("Pessoa não encontrado! idPessoa: " + id));
+		Pessoa pessoa = retornarPessoa(id);
 		
 		logger.info("[02 - Exlcuindo pessoa]");
 		pessoaRepository.delete(pessoa);
@@ -64,7 +64,7 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	public PessoaDto atualizar(Long id, PessoaDto pessoaDto) {
 		logger.info("[01 - Recuperando pessoa pelo idPessoa: {}]", id);
-		Pessoa pessoa = pessoaRepository.findById(id).orElseThrow(() -> new RuntimeException("Pessoa não encontrado! idPessoa: " + id));
+		Pessoa pessoa = retornarPessoa(id);
 		
 		logger.info("[02 - Atualizando pessoa id: {}]", id);
 		pessoaDto.setId(id);
@@ -74,6 +74,10 @@ public class PessoaServiceImpl implements PessoaService {
 		
 		PessoaDto retornoPessoaDto = pessoaMapper.mapearEntidadeParaDto(pessoaRepository.save(pessoaAtualizada));
 		return retornoPessoaDto;
+	}
+
+	private Pessoa retornarPessoa(Long id) {
+		return pessoaRepository.findById(id).orElseThrow(() -> new RuntimeException("Pessoa não encontrado! idPessoa: " + id));
 	}
 
 }
