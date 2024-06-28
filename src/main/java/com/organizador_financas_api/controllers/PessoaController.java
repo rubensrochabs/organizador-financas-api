@@ -25,13 +25,6 @@ public class PessoaController {
 	@Autowired
 	private PessoaService pessoaService;
 
-	@PostMapping
-	public ResponseEntity<PessoaDto> salvar(@RequestBody final PessoaDto pessoaDto) {
-		PessoaDto retornoPessoaDto = pessoaService.salvar(pessoaDto);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(retornoPessoaDto.getId()).toUri();
-		return ResponseEntity.created(uri).body(retornoPessoaDto);
-	}
-
 	@GetMapping
 	public ResponseEntity<List<PessoaDto>> listar() {
 		List<PessoaDto> lsPessoaDto = pessoaService.listar();
@@ -43,16 +36,23 @@ public class PessoaController {
 		PessoaDto pessoaDto = pessoaService.buscarPorId(id);
 		return ResponseEntity.ok(pessoaDto);
 	}
-	
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> delete(@PathVariable final Long id) {
-		pessoaService.delete(id);
-		return ResponseEntity.noContent().build();
+
+	@PostMapping
+	public ResponseEntity<PessoaDto> incluir(@RequestBody final PessoaDto pessoaDto) {
+		PessoaDto retornoPessoaDto = pessoaService.incluir(pessoaDto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(retornoPessoaDto.getId()).toUri();
+		return ResponseEntity.created(uri).body(retornoPessoaDto);
 	}
 
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<PessoaDto> atualizar(@PathVariable final Long id, @RequestBody final PessoaDto pessoaDto) {
 		PessoaDto retornoPessoaDto = pessoaService.atualizar(id, pessoaDto);
 		return ResponseEntity.ok().body(retornoPessoaDto);
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable final Long id) {
+		pessoaService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }
