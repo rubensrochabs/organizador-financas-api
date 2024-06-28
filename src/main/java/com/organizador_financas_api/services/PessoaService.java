@@ -10,13 +10,6 @@ import com.organizador_financas_api.model.dto.PessoaDto;
 public interface PessoaService {
 
 	/**
-	 * Método responsável por salvar uma pessoa
-	 * @param pessoaDto
-	 * @return {@link PessoaDto}
-	 */
-	public PessoaDto salvar(PessoaDto pessoaDto);
-
-	/**
 	 * Método responsável por retornar uma lista de pessoas
 	 * @param
 	 * @return Lista de {@link PessoaDto}
@@ -31,11 +24,11 @@ public interface PessoaService {
 	public PessoaDto buscarPorId(Long idPessoa);
 
 	/**
-	 * Método responsável por deletar uma pessoa pelo idPessoa
-	 * @param idPessoa
-	 * @return void
+	 * Método responsável por salvar uma pessoa
+	 * @param pessoaDto
+	 * @return {@link PessoaDto}
 	 */
-	public void delete(Long idPessoa);
+	public PessoaDto incluir(PessoaDto pessoaDto);
 
 	/**
 	 * Método responsável por atualizar uma pessoa
@@ -44,5 +37,12 @@ public interface PessoaService {
 	 * @return {@link PessoaDto}
 	 */
 	public PessoaDto atualizar(Long id, PessoaDto pessoaDto);
+
+	/**
+	 * Método responsável por deletar uma pessoa pelo idPessoa
+	 * @param idPessoa
+	 * @return void
+	 */
+	public void delete(Long idPessoa);
 
 }

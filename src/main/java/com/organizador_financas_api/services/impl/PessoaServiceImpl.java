@@ -1,6 +1,5 @@
 package com.organizador_financas_api.services.impl;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,7 @@ import com.organizador_financas_api.services.PessoaService;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private PessoaRepository pessoaRepository;
@@ -26,58 +25,55 @@ public class PessoaServiceImpl implements PessoaService {
 	private PessoaMapper pessoaMapper;
 
 	@Override
-	public PessoaDto salvar(PessoaDto pessoaDto) {
-		logger.info("[01 - Salvando Pessoa]");
-		Pessoa pessoa = pessoaMapper.mapearDtoParaEntidade(pessoaDto);
-		pessoa.setDtInclusao(LocalDateTime.now());
-		PessoaDto retornoPessoa = pessoaMapper.mapearEntidadeParaDto(pessoaRepository.save(pessoa));
-
-		return retornoPessoa;
-	}
-
-	@Override
 	public List<PessoaDto> listar() {
-		logger.info("[01 - Recuperando lista de pessoas]");
-		List<PessoaDto> lsPessoaDto = pessoaRepository.findAll().stream()
+		log.info("[01 - Recuperando lista de pessoas]");
+		List<PessoaDto> lsPessoaDto = pessoaRepository.retornarLista().stream()
 				.map(pessoa -> pessoaMapper.mapearEntidadeParaDto(pessoa)).collect(Collectors.toList());
 
 		return lsPessoaDto;
 	}
 
 	@Override
-	public PessoaDto buscarPorId(Long id) {
-		logger.info("[01 - Recuperando pessoa pelo idPessoa: {}]", id);
-		Pessoa pessoa = retornarPessoa(id);
+	public PessoaDto buscarPorId(final Long id) {
+		log.info("[01 - Recuperando pessoa | idPessoa: {}]", id);
+		Pessoa pessoa = recuperarPessoa(id);
 
 		return pessoaMapper.mapearEntidadeParaDto(pessoa);
 	}
 
 	@Override
-	public void delete(Long id) {
-		logger.info("[01 - Recuperando pessoa pelo idPessoa: {}]", id);
-		Pessoa pessoa = retornarPessoa(id);
+	public PessoaDto incluir(final PessoaDto pessoaDto) {
+		log.info("[01 - Incluindo Pessoa]");
+		Pessoa pessoa = pessoaMapper.mapearDtoParaEntidade(pessoaDto);
+		PessoaDto retornoPessoa = pessoaMapper.mapearEntidadeParaDto(pessoaRepository.persistir(pessoa));
 
-		logger.info("[02 - Exlcuindo pessoa]");
-		pessoaRepository.delete(pessoa);
+		return retornoPessoa;
 	}
 
 	@Override
-	public PessoaDto atualizar(Long id, PessoaDto pessoaDto) {
-		logger.info("[01 - Recuperando pessoa pelo idPessoa: {}]", id);
-		Pessoa pessoa = retornarPessoa(id);
+	public PessoaDto atualizar(final Long id, final PessoaDto pessoaDto) {
+		log.info("[01 - Validando existência de Pessoa | idPessoa: {}]", id);
+		recuperarPessoa(id);
 
-		logger.info("[02 - Atualizando pessoa id: {}]", id);
+		log.info("[02 - Atualizando Pessoa | PessoaDto: {}]", pessoaDto);
 		pessoaDto.setId(id);
-		Pessoa pessoaAtualizada = pessoaMapper.mapearDtoParaEntidade(pessoaDto);
-		pessoaAtualizada.setDtInclusao(pessoa.getDtInclusao());
-		pessoaAtualizada.setDtAlteracao(LocalDateTime.now());
+		final Pessoa pessoaAtualizada = pessoaMapper.mapearDtoParaEntidade(pessoaDto);
+		pessoaRepository.atualizar(pessoaAtualizada);
 
-		PessoaDto retornoPessoaDto = pessoaMapper.mapearEntidadeParaDto(pessoaRepository.save(pessoaAtualizada));
-		return retornoPessoaDto;
+		return pessoaMapper.mapearEntidadeParaDto(pessoaAtualizada);
 	}
 
-	private Pessoa retornarPessoa(Long id) {
-		return pessoaRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Pessoa não encontrado! idPessoa: " + id));
+	@Override
+	public void delete(final Long id) {
+		log.info("[01 - Validando existência de Pessoa | idPessoa: {}]", id);
+		recuperarPessoa(id);
+
+		log.info("[02 - Exlcuindo pessoa]");
+		pessoaRepository.delete(id);
+	}
+
+	private Pessoa recuperarPessoa(final Long id) {
+		return pessoaRepository.recuperar(id)
+				.orElseThrow(() -> new RuntimeException("Pessoa não encontrado! | idPessoa: " + id));
 	}
 }
