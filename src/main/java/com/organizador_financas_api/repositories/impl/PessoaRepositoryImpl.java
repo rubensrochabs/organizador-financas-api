@@ -55,7 +55,7 @@ public class PessoaRepositoryImpl implements PessoaRepository {
 		parameter.addValue("idPessoa", idPessoa);
 
 		return jdbcUtils
-				.recuperar(queryConsultarPessoaById, parameter, BeanPropertyRowMapper.newInstance(Pessoa.class))
+				.recuperar(queryConsultarById, parameter, BeanPropertyRowMapper.newInstance(Pessoa.class))
 				.stream().findFirst();
 	}
 
