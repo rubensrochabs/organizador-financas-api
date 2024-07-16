@@ -25,8 +25,8 @@ public interface StandardController {
 	}
 
 	/**
-	 * Retorna um ResponseEntity com sucesso e sem conteúdo.<br>
-	 * Status: 204 No Content.
+	 * Retorna um ResponseEntity sem conteúdo com sucesso.<br>
+	 * Status: 204 No Content
 	 * 
 	 * @param void
 	 * @return
@@ -35,14 +35,35 @@ public interface StandardController {
 		return retornarResponse(HttpStatus.NO_CONTENT, null);
 	}
 
+	/**
+	 * Retorna um ResponseEntity contendo uma lista com sucesso.<br>
+	 * Status: 200 Ok
+	 * 
+	 * @param void
+	 * @return
+	 */
 	default <T extends Object> ResponseEntity<StandardResponse<List<T>>> retornarSucesso(final List<T> response) {
 		return !response.isEmpty() ? retornarResponse(HttpStatus.OK, response) : retornarSemConteudo();
 	}
 
+	/**
+	 * Retorna um ResponseEntity contendo um objeto com sucesso.<br>
+	 * Status: 200 Ok
+	 * 
+	 * @param void
+	 * @return
+	 */
 	default <T extends Object> ResponseEntity<StandardResponse<T>> retornarSucesso(final T response) {
 		return response != null ? retornarResponse(HttpStatus.OK, response) : retornarSemConteudo();
 	}
 
+	/**
+	 * Retorna um ResponseEntity contendo um objeto que foi criado com sucesso.<br>
+	 * Status: 201 Created
+	 * 
+	 * @param void
+	 * @return
+	 */
 	default <T extends Object> ResponseEntity<StandardResponse<T>> retornarCriado(final T response) {
 		return response != null ? retornarResponse(HttpStatus.CREATED, response) : retornarSemConteudo();
 	}
