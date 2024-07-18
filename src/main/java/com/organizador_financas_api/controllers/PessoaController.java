@@ -1,6 +1,5 @@
 package com.organizador_financas_api.controllers;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,46 +12,47 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.organizador_financas_api.model.dto.PessoaDto;
+import com.organizador_financas_api.model.dto.StandardResponse;
 import com.organizador_financas_api.services.PessoaService;
+import com.organizador_financas_api.utils.StandardController;
 
 @RestController
 @RequestMapping(value = "/pessoa")
-public class PessoaController {
+public class PessoaController implements StandardController {
 
 	@Autowired
 	private PessoaService pessoaService;
 
 	@GetMapping
-	public ResponseEntity<List<PessoaDto>> listar() {
+	public ResponseEntity<StandardResponse<List<PessoaDto>>> listar() {
 		List<PessoaDto> lsPessoaDto = pessoaService.listar();
-		return ResponseEntity.ok(lsPessoaDto);
+		return retornarSucesso(lsPessoaDto);
 	}
-	
+
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<PessoaDto> buscarPorId(@PathVariable final Long id) {
+	public ResponseEntity<StandardResponse<PessoaDto>> buscarPorId(@PathVariable final Long id) {
 		PessoaDto pessoaDto = pessoaService.buscarPorId(id);
-		return ResponseEntity.ok(pessoaDto);
+		return retornarSucesso(pessoaDto);
 	}
 
 	@PostMapping
-	public ResponseEntity<PessoaDto> incluir(@RequestBody final PessoaDto pessoaDto) {
+	public ResponseEntity<StandardResponse<PessoaDto>> incluir(@RequestBody final PessoaDto pessoaDto) {
 		PessoaDto retornoPessoaDto = pessoaService.incluir(pessoaDto);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(retornoPessoaDto.getId()).toUri();
-		return ResponseEntity.created(uri).body(retornoPessoaDto);
+		return retornarCriado(retornoPessoaDto);
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<PessoaDto> atualizar(@PathVariable final Long id, @RequestBody final PessoaDto pessoaDto) {
+	public ResponseEntity<StandardResponse<PessoaDto>> atualizar(@PathVariable final Long id,
+			@RequestBody final PessoaDto pessoaDto) {
 		PessoaDto retornoPessoaDto = pessoaService.atualizar(id, pessoaDto);
-		return ResponseEntity.ok().body(retornoPessoaDto);
+		return retornarSucesso(retornoPessoaDto);
 	}
-	
+
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> delete(@PathVariable final Long id) {
+	public ResponseEntity<StandardResponse<Void>> delete(@PathVariable final Long id) {
 		pessoaService.delete(id);
-		return ResponseEntity.noContent().build();
+		return retornarSemConteudo();
 	}
 }
