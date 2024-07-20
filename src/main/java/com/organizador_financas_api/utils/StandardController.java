@@ -2,10 +2,10 @@ package com.organizador_financas_api.utils;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.organizador_financas_api.model.dto.StandardResponse;
+import com.organizador_financas_api.model.enums.HttpEnum;
 
 public interface StandardController {
 
@@ -15,13 +15,13 @@ public interface StandardController {
 	 * O parâmetro "response" é incluído na generalização "dados" de
 	 * OrgFinanceiroResponse.
 	 * 
-	 * @param status   {@link HttpStatus}
+	 * @param httpEnum {@link HttpEnum}
 	 * @param response
-	 * @return
+	 * @return ResponseEntity
 	 */
-	default <T extends Object> ResponseEntity<StandardResponse<T>> retornarResponse(final HttpStatus status,
+	default <T extends Object> ResponseEntity<StandardResponse<T>> retornarResponse(final HttpEnum httpEnum,
 			final T response) {
-		return ResponseEntity.status(status).body(new StandardResponse<T>(status, response));
+		return ResponseEntity.status(httpEnum.getStatus()).body(new StandardResponse<T>(httpEnum, response));
 	}
 
 	/**
@@ -29,43 +29,40 @@ public interface StandardController {
 	 * Status: 204 No Content
 	 * 
 	 * @param void
-	 * @return
+	 * @return ResponseEntity
 	 */
 	default <T extends Object> ResponseEntity<StandardResponse<T>> retornarSemConteudo() {
-		return retornarResponse(HttpStatus.NO_CONTENT, null);
+		return retornarResponse(HttpEnum.HTTP_204, null);
 	}
 
 	/**
 	 * Retorna um ResponseEntity contendo uma lista com sucesso.<br>
 	 * Status: 200 Ok
 	 * 
-	 * @param void
-	 * @return
+	 * @return ResponseEntity
 	 */
 	default <T extends Object> ResponseEntity<StandardResponse<List<T>>> retornarSucesso(final List<T> response) {
-		return !response.isEmpty() ? retornarResponse(HttpStatus.OK, response) : retornarSemConteudo();
+		return !response.isEmpty() ? retornarResponse(HttpEnum.HTTP_200, response) : retornarSemConteudo();
 	}
 
 	/**
 	 * Retorna um ResponseEntity contendo um objeto com sucesso.<br>
 	 * Status: 200 Ok
 	 * 
-	 * @param void
-	 * @return
+	 * @return ResponseEntity
 	 */
 	default <T extends Object> ResponseEntity<StandardResponse<T>> retornarSucesso(final T response) {
-		return response != null ? retornarResponse(HttpStatus.OK, response) : retornarSemConteudo();
+		return response != null ? retornarResponse(HttpEnum.HTTP_200, response) : retornarSemConteudo();
 	}
 
 	/**
 	 * Retorna um ResponseEntity contendo um objeto que foi criado com sucesso.<br>
 	 * Status: 201 Created
 	 * 
-	 * @param void
-	 * @return
+	 * @return ResponseEntity
 	 */
 	default <T extends Object> ResponseEntity<StandardResponse<T>> retornarCriado(final T response) {
-		return response != null ? retornarResponse(HttpStatus.CREATED, response) : retornarSemConteudo();
+		return response != null ? retornarResponse(HttpEnum.HTTP_201, response) : retornarSemConteudo();
 	}
 
 }

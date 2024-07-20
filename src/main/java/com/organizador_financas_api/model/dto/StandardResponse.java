@@ -3,26 +3,26 @@ package com.organizador_financas_api.model.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import org.springframework.http.HttpStatus;
+import com.organizador_financas_api.model.enums.HttpEnum;
 
 public class StandardResponse<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private LocalDateTime timestamp;
 	private Integer nrStatus;
-	private transient T dados;
 	private String txMensagem;
+	private T dados;
 
 	public StandardResponse() {
 		super();
 	}
 
-	public StandardResponse(final HttpStatus status, final T dados) {
+	public StandardResponse(final HttpEnum status, final T dados) {
 		super();
 		this.timestamp = LocalDateTime.now();
-		this.nrStatus = status.value();
+		this.nrStatus = status.getStatus().value();
+		this.txMensagem = status.getMensagem();
 		this.dados = dados;
-		this.txMensagem = ""; // TODO: Apresentar mensagem amigável de acordo com status.
 	}
 
 	public LocalDateTime getTimestamp() {
