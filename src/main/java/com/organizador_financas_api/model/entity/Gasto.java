@@ -1,7 +1,7 @@
 package com.organizador_financas_api.model.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "gasto")
+@Table(name = "tb_gasto")
 @Data
 @NoArgsConstructor
 public class Gasto {
@@ -22,9 +22,8 @@ public class Gasto {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idGasto;
 	private Long idPessoa;
-	private Integer idCategoriaGasto;
+	private Integer idGastoCategoria;
+	private LocalDate dtEmissao;
 	private BigDecimal nrValor;
-	private String txEstabelecimento;
 	private String txDescricao;
-	private Date dtEmissao;
 }
