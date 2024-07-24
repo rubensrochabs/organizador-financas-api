@@ -1,5 +1,7 @@
 package com.organizador_financas_api.repositories.impl;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -26,6 +28,9 @@ public class GastoRepositoryImpl implements GastoRepository {
 	@Value("${SPS.TB_GASTO.WHERE.ID}")
 	private String queryRecuperarGastoById;
 
+	@Value("${SPS.TB_GASTO.WHERE.ID_PESSOA.AND.DT_EMISSAO}")
+	private String queryRecuperarGastoPorIdPessoa;
+
 	@Value("${SPI.TB_GASTO}")
 	private String queryPersistirGasto;
 
@@ -46,6 +51,19 @@ public class GastoRepositoryImpl implements GastoRepository {
 
 		return jdbcUtils.recuperar(queryRecuperarGastoById, parameter, BeanPropertyRowMapper.newInstance(Gasto.class))
 				.stream().findFirst();
+	}
+
+	@Override
+	public List<Gasto> recuperarLsPorIdPessoa(final Long idPessoa, final LocalDate dtMin, final LocalDate dtMax) {
+		logger.info("Início Recuperar Gasto por idPessoa e intervalo de tempo | idPessoa: {}, dtMin: {}, dtMax: {}",
+				idPessoa, dtMin, dtMax);
+		MapSqlParameterSource parameter = new MapSqlParameterSource();
+		parameter.addValue("idPessoa", idPessoa);
+		parameter.addValue("dtMin", dtMin);
+		parameter.addValue("dtMax", dtMax);
+
+		return jdbcUtils.recuperar(queryRecuperarGastoPorIdPessoa, parameter,
+				BeanPropertyRowMapper.newInstance(Gasto.class));
 	}
 
 	@Override
