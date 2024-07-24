@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_gasto")
 @Data
 @NoArgsConstructor
-public class Gasto {
+public class Gasto extends StandardDomain {
+	private static final long serialVersionUID = -5104440885014201432L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

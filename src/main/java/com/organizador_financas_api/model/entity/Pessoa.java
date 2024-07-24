@@ -23,7 +23,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pessoa implements Serializable {
+public class Pessoa extends StandardDomain {
 	private static final long serialVersionUID = 7173950161701440088L;
 
 	@Id
@@ -34,9 +34,5 @@ public class Pessoa implements Serializable {
 	@Column(name = "nm_nome")
 	private String nmNome;
 
-	@Column(name = "dt_inclusao", updatable = false)
-	private LocalDateTime dataInclusao;
 
-	@Column(name = "dt_alteracao")
-	private LocalDateTime dataAlteracao;
 }
