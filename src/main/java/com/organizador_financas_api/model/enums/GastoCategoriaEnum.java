@@ -40,4 +40,8 @@ public enum GastoCategoriaEnum {
 //			.orElseThrow(() -> new IllegalArgumentException(
 //				String.format("Código de categoria de gasto inválido! | código: %d", codigo)));
 	}
+	
+	public static String getNmNomeByCodigo(final Integer codigo) {
+		return getByCodigo(codigo).getNmNome();
+	}
 }
