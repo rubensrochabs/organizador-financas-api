@@ -43,7 +43,7 @@ public class GastoMapper {
 		dto.setIdPessoa(entidade.getIdPessoa());
 		dto.setNmPessoa(nmPessoa);
 		dto.setIdGastoCategoria(entidade.getIdGastoCategoria());
-		dto.setNmGastoCategoria(GastoCategoriaEnum.getByCodigo(entidade.getIdGastoCategoria()).getNmNome());
+		dto.setNmGastoCategoria(GastoCategoriaEnum.getNmNomeByCodigo(entidade.getIdGastoCategoria()));
 		dto.setDtEmissao(entidade.getDtEmissao());
 		dto.setNrValor(entidade.getNrValor());
 		dto.setTxDescricao(entidade.getTxDescricao());
