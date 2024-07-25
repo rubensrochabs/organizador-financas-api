@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.organizador_financas_api.model.dto.GastoEntradaDto;
 import com.organizador_financas_api.model.dto.GastoSaidaDto;
+import com.organizador_financas_api.model.dto.RelatorioGastoPorCategoriaDto;
 
 @Service
 public interface GastoService {
@@ -20,4 +21,6 @@ public interface GastoService {
 	public GastoEntradaDto alterar(Long idGasto, GastoEntradaDto gastoDto);
 	
 	public void delete(Long idGasto);
+
+	public RelatorioGastoPorCategoriaDto gerarRelatorioGastoPorCategoria(Long idPessoa, LocalDate dtMin, LocalDate dtMax);
 }

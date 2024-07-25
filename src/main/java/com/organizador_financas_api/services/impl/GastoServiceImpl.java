@@ -1,6 +1,7 @@
 package com.organizador_financas_api.services.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.organizador_financas_api.mappers.GastoMapper;
+import com.organizador_financas_api.mappers.RelatorioMapper;
 import com.organizador_financas_api.model.dto.GastoEntradaDto;
 import com.organizador_financas_api.model.dto.GastoSaidaDto;
 import com.organizador_financas_api.model.dto.PessoaDto;
+import com.organizador_financas_api.model.dto.RelatorioGastoPorCategoriaDto;
 import com.organizador_financas_api.model.dto.ValorGastoPorCategoriaDto;
 import com.organizador_financas_api.model.entity.Gasto;
+import com.organizador_financas_api.model.enums.GastoCategoriaEnum;
 import com.organizador_financas_api.repositories.GastoRepository;
 import com.organizador_financas_api.services.GastoService;
 import com.organizador_financas_api.services.PessoaService;
@@ -34,16 +38,24 @@ public class GastoServiceImpl implements GastoService {
 	@Autowired
 	private GastoMapper gastoMapper;
 
+	@Autowired
+	private RelatorioMapper relatorioMapper;
+
 	@Override
 	public GastoSaidaDto buscarPorId(final Long idGasto) {
 		logger.info("[01 - Recuperando Gasto | idGasto: {}]", idGasto);
 		Gasto gasto = recuperarGasto(idGasto);
 
 		logger.info("[02 - Recuperando Pessoa | idPessoa: {}]", gasto.getIdPessoa());
-		PessoaDto pessoaDto = recuperarPessoaById(gasto.getIdPessoa());
+		PessoaDto pessoaDto = pessoaService.buscarPorId(gasto.getIdPessoa());
 
 		logger.info("[03 - Mapeando resposta]");
 		return gastoMapper.mapear(gasto, pessoaDto.getNmNome());
+	}
+
+	private Gasto recuperarGasto(final Long idGasto) {
+		return gastoRepository.recuperar(idGasto)
+				.orElseThrow(() -> new RuntimeException("Gasto não encontrado! | idGasto: " + idGasto));
 	}
 
 	@Override
@@ -52,7 +64,7 @@ public class GastoServiceImpl implements GastoService {
 		List<Gasto> lsGastos = gastoRepository.recuperarLsPorIdPessoa(idPessoa, dtMin, dtMax);
 
 		logger.info("[02 - Recuperando Pessoa | idPessoa: {}]", idPessoa);
-		PessoaDto pessoaDto = recuperarPessoaById(idPessoa);
+		PessoaDto pessoaDto = pessoaService.buscarPorId(idPessoa);
 
 		logger.info("[03 - Mapeando resposta]");
 		List<GastoSaidaDto> lsGastoDto = lsGastos.stream()
@@ -88,12 +100,87 @@ public class GastoServiceImpl implements GastoService {
 		gastoRepository.delete(idGasto);
 	}
 
-	private PessoaDto recuperarPessoaById(final Long idPessoa) {
-		return pessoaService.buscarPorId(idPessoa);
+	@Override
+	public RelatorioGastoPorCategoriaDto gerarRelatorioGastoPorCategoria(final Long idPessoa, final LocalDate dtMin,
+			final LocalDate dtMax) {
+
+		logger.info("[1.0] - Recuperando Pessoa");
+		final PessoaDto pessoaDto = pessoaService.buscarPorId(idPessoa);
+
+		logger.info("[2.0] - Recuperando valores gastos por categoria");
+		final List<ValorGastoPorCategoriaDto> lsVlGastoPorCategoria = gastoRepository
+				.recuperarLsVlGastoPorCategoria(idPessoa, dtMin, dtMax);
+
+		logger.info("[3.0] - Calculando valor total gasto no período");
+		BigDecimal vltGastoPeriodo = lsVlGastoPorCategoria.stream().map(vlGasto -> vlGasto.getVltGasto())
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		logger.info("[4.0] - Preenchendo lista de valores gastos por categoria");
+		preenchendoLsVlGastoPorCategoria(lsVlGastoPorCategoria, vltGastoPeriodo);
+
+		logger.info("[5.0] - Preenchendo Relatório");
+		final RelatorioGastoPorCategoriaDto relatorio = relatorioMapper.mapear(pessoaDto, dtMin, dtMax, vltGastoPeriodo,
+				lsVlGastoPorCategoria);
+
+		return relatorio;
 	}
 
-	private Gasto recuperarGasto(final Long idGasto) {
-		return gastoRepository.recuperar(idGasto)
-				.orElseThrow(() -> new RuntimeException("Gasto não encontrado! | idGasto: " + idGasto));
+	private void preenchendoLsVlGastoPorCategoria(List<ValorGastoPorCategoriaDto> lsVlGastoPorCategoria,
+			BigDecimal vltGastoPeriodo) {
+		logger.info("[4.1] - Preenchendo categorias em que houve gastos");
+		preenchendoCategoriasComGastos(lsVlGastoPorCategoria, vltGastoPeriodo);
+
+		logger.info("[4.2] - Preenchendo categorias em que não houve gastos");
+		for (GastoCategoriaEnum categoria : GastoCategoriaEnum.values()) {
+			if (lsVlGastoPorCategoria.stream()
+					.noneMatch(vlGasto -> categoria.getCodigo().compareTo(vlGasto.getIdGastoCategoria()) == 0)) {
+				lsVlGastoPorCategoria.add(new ValorGastoPorCategoriaDto(categoria));
+			}
+		}
+
+		logger.info("[4.3] - Ordenando lista de gastos por categoria");
+		lsVlGastoPorCategoria.sort((a, b) -> a.getIdGastoCategoria().compareTo(b.getIdGastoCategoria()));
+	}
+
+	private void preenchendoCategoriasComGastos(List<ValorGastoPorCategoriaDto> lsVlGastoPorCategoria,
+			BigDecimal vltGastoPeriodo) {
+		logger.info("[4.1.1] - Setando nome de cada categoria");
+		for (ValorGastoPorCategoriaDto vlGastoPorCategoria : lsVlGastoPorCategoria) {
+			for (GastoCategoriaEnum categoria : GastoCategoriaEnum.values()) {
+				if (categoria.getCodigo().compareTo(vlGastoPorCategoria.getIdGastoCategoria()) == 0) {
+					vlGastoPorCategoria.setNmGastoCategoria(
+							GastoCategoriaEnum.getNmNomeByCodigo(vlGastoPorCategoria.getIdGastoCategoria()));
+				}
+			}
+		}
+
+		logger.info("[4.1.2] - Calculando gasto percentual de cada categoria");
+		List<BigDecimal> lsPercentuais = new ArrayList<>();
+		BigDecimal somaPercentuais = BigDecimal.ZERO;
+
+		for (ValorGastoPorCategoriaDto vlGastoPorCategoria : lsVlGastoPorCategoria) {
+			BigDecimal percentual = vlGastoPorCategoria.getVltGasto().multiply(BigDecimal.valueOf(100L))
+					.divide(vltGastoPeriodo, 2, RoundingMode.HALF_UP);
+
+			lsPercentuais.add(percentual);
+			somaPercentuais = somaPercentuais.add(percentual);
+		}
+
+		logger.info("[4.1.3] - Ajustando diferença dos percentuais");
+		BigDecimal diferenca = BigDecimal.valueOf(100L).subtract(somaPercentuais);
+
+		for (int i = 0; i < lsPercentuais.size(); i++) {
+			if (BigDecimal.ZERO.compareTo(diferenca) == 0)
+				break;
+
+			BigDecimal ajuste = diferenca.signum() == 1 ? BigDecimal.valueOf(0.01) : BigDecimal.valueOf(-0.01);
+			lsPercentuais.set(i, lsPercentuais.get(i).add(ajuste));
+			diferenca = diferenca.subtract(ajuste);
+		}
+
+		logger.info("[4.1.4] - Setando percentuais ajustados");
+		for (int i = 0; i < lsVlGastoPorCategoria.size(); i++) {
+			lsVlGastoPorCategoria.get(i).setPercentualGasto(lsPercentuais.get(i));
+		}
 	}
 }
