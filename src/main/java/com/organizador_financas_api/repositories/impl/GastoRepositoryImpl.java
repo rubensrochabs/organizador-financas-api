@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.organizador_financas_api.jdbc.JdbcUtils;
+import com.organizador_financas_api.model.dto.ValorGastoPorCategoriaDto;
 import com.organizador_financas_api.model.entity.Gasto;
 import com.organizador_financas_api.repositories.GastoRepository;
 
@@ -30,6 +31,9 @@ public class GastoRepositoryImpl implements GastoRepository {
 
 	@Value("${SPS.TB_GASTO.WHERE.ID_PESSOA.AND.DT_EMISSAO}")
 	private String queryRecuperarGastoPorIdPessoa;
+
+	@Value("${SPS.TB_GASTO.VALOR.GASTO.POR.CATEGORIA}")
+	private String queryRecuperarLsVlGastoPorCategoria;
 
 	@Value("${SPI.TB_GASTO}")
 	private String queryPersistirGasto;
@@ -64,6 +68,20 @@ public class GastoRepositoryImpl implements GastoRepository {
 
 		return jdbcUtils.recuperar(queryRecuperarGastoPorIdPessoa, parameter,
 				BeanPropertyRowMapper.newInstance(Gasto.class));
+	}
+
+	@Override
+	public List<ValorGastoPorCategoriaDto> recuperarLsVlGastoPorCategoria(final Long idPessoa, final LocalDate dtMin,
+			final LocalDate dtMax) {
+		logger.info("Início recuperar valor gasto por categoria | idPessoa: {}, dtMin: {}, dtMax: {}", idPessoa, dtMin,
+				dtMax);
+		MapSqlParameterSource parameter = new MapSqlParameterSource();
+		parameter.addValue("idPessoa", idPessoa);
+		parameter.addValue("dtMin", dtMin);
+		parameter.addValue("dtMax", dtMax);
+
+		return jdbcUtils.recuperar(queryRecuperarLsVlGastoPorCategoria, parameter,
+				BeanPropertyRowMapper.newInstance(ValorGastoPorCategoriaDto.class));
 	}
 
 	@Override
