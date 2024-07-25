@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.organizador_financas_api.model.dto.GastoEntradaDto;
 import com.organizador_financas_api.model.dto.GastoSaidaDto;
+import com.organizador_financas_api.model.dto.RelatorioGastoPorCategoriaDto;
 import com.organizador_financas_api.model.dto.StandardResponse;
 import com.organizador_financas_api.services.GastoService;
 import com.organizador_financas_api.utils.StandardController;
@@ -41,6 +42,14 @@ public class GastoController implements StandardController {
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate dtMax) {
 		List<GastoSaidaDto> lsGastoSaidaDto = gastoService.listarPorIdPessoa(idPessoa, dtMin, dtMax);
 		return retornarSucesso(lsGastoSaidaDto);
+	}
+	
+	@GetMapping(value = "/relatorio")
+	public ResponseEntity<StandardResponse<RelatorioGastoPorCategoriaDto>> gerarRelatorioGastoPorCategoria(@RequestParam final Long idPessoa,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate dtMin,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate dtMax) {
+		RelatorioGastoPorCategoriaDto relatorio = gastoService.gerarRelatorioGastoPorCategoria(idPessoa, dtMin, dtMax);
+		return retornarSucesso(relatorio);
 	}
 
 	@PostMapping
