@@ -1,4 +1,4 @@
-package com.organizador_financas_api.model.dto;
+package com.organizador_financas_api.controllers;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

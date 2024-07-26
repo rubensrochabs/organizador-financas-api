@@ -1,10 +1,9 @@
-package com.organizador_financas_api.utils;
+package com.organizador_financas_api.controllers;
 
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.organizador_financas_api.model.dto.StandardResponse;
 import com.organizador_financas_api.model.enums.HttpEnum;
 
 public interface StandardController {
