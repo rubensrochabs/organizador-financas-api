@@ -166,7 +166,7 @@ public class GastoServiceImpl implements GastoService {
 			somaPercentuais = somaPercentuais.add(percentual);
 		}
 
-		logger.info("[4.1.3] - Ajustando diferença dos percentuais");
+		logger.info("[4.1.3] - Arredondando percentuais");
 		BigDecimal diferenca = BigDecimal.valueOf(100L).subtract(somaPercentuais);
 
 		for (int i = 0; i < lsPercentuais.size(); i++) {
@@ -178,7 +178,7 @@ public class GastoServiceImpl implements GastoService {
 			diferenca = diferenca.subtract(ajuste);
 		}
 
-		logger.info("[4.1.4] - Setando percentuais ajustados");
+		logger.info("[4.1.4] - Setando percentuais arredondados");
 		for (int i = 0; i < lsVlGastoPorCategoria.size(); i++) {
 			lsVlGastoPorCategoria.get(i).setPercentualGasto(lsPercentuais.get(i));
 		}
