@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.organizador_financas_api.exception.NaoEncontradoException;
+import com.organizador_financas_api.exception.OrganizadorFinanceiroException;
+import com.organizador_financas_api.exception.ServicoException;
 import com.organizador_financas_api.mappers.GastoMapper;
 import com.organizador_financas_api.mappers.RelatorioMapper;
 import com.organizador_financas_api.model.dto.GastoEntradaDto;
@@ -43,87 +46,128 @@ public class GastoServiceImpl implements GastoService {
 
 	@Override
 	public GastoSaidaDto buscarPorId(final Long idGasto) {
-		logger.info("[01 - Recuperando Gasto | idGasto: {}]", idGasto);
-		Gasto gasto = recuperarGasto(idGasto);
+		try {
+			logger.info("[01 - Recuperando Gasto | idGasto: {}]", idGasto);
+			Gasto gasto = recuperarGasto(idGasto);
 
-		logger.info("[02 - Recuperando Pessoa | idPessoa: {}]", gasto.getIdPessoa());
-		PessoaDto pessoaDto = pessoaService.buscarPorId(gasto.getIdPessoa());
+			logger.info("[02 - Recuperando Pessoa | idPessoa: {}]", gasto.getIdPessoa());
+			PessoaDto pessoaDto = pessoaService.buscarPorId(gasto.getIdPessoa());
 
-		logger.info("[03 - Mapeando resposta]");
-		return gastoMapper.mapear(gasto, pessoaDto.getNmNome());
+			logger.info("[03 - Mapeando resposta]");
+			return gastoMapper.mapear(gasto, pessoaDto.getNmNome());
+		} catch (OrganizadorFinanceiroException e) {
+			logger.error(e.toString());
+			throw e;
+		} catch (Exception e) {
+			logger.error(e.toString());
+			throw new ServicoException(e.getMessage());
+		}
 	}
 
 	private Gasto recuperarGasto(final Long idGasto) {
 		return gastoRepository.recuperar(idGasto)
-				.orElseThrow(() -> new RuntimeException("Gasto não encontrado! | idGasto: " + idGasto));
+				.orElseThrow(() -> new NaoEncontradoException("Gasto não encontrado! | idGasto: " + idGasto));
 	}
 
 	@Override
 	public List<GastoSaidaDto> listarPorIdPessoa(final Long idPessoa, final LocalDate dtMin, final LocalDate dtMax) {
-		logger.info("[01 - Listando gastos por Pessoa | idPessoa: {}]", idPessoa);
-		List<Gasto> lsGastos = gastoRepository.recuperarLsPorIdPessoa(idPessoa, dtMin, dtMax);
+		try {
+			logger.info("[01 - Listando gastos por Pessoa | idPessoa: {}]", idPessoa);
+			List<Gasto> lsGastos = gastoRepository.recuperarLsPorIdPessoa(idPessoa, dtMin, dtMax);
 
-		logger.info("[02 - Recuperando Pessoa | idPessoa: {}]", idPessoa);
-		PessoaDto pessoaDto = pessoaService.buscarPorId(idPessoa);
+			logger.info("[02 - Recuperando Pessoa | idPessoa: {}]", idPessoa);
+			PessoaDto pessoaDto = pessoaService.buscarPorId(idPessoa);
 
-		logger.info("[03 - Mapeando resposta]");
-		List<GastoSaidaDto> lsGastoDto = lsGastos.stream()
-				.map(gasto -> gastoMapper.mapear(gasto, pessoaDto.getNmNome())).collect(Collectors.toList());
+			logger.info("[03 - Mapeando resposta]");
+			List<GastoSaidaDto> lsGastoDto = lsGastos.stream()
+					.map(gasto -> gastoMapper.mapear(gasto, pessoaDto.getNmNome())).collect(Collectors.toList());
 
-		return lsGastoDto;
+			return lsGastoDto;
+		} catch (OrganizadorFinanceiroException e) {
+			logger.error(e.toString());
+			throw e;
+		} catch (Exception e) {
+			logger.error(e.toString());
+			throw new ServicoException(e.getMessage());
+		}
 	}
 
 	@Override
 	public GastoEntradaDto incluir(final GastoEntradaDto gastoDto) {
+		try {
 			logger.info("[01 - Incluindo Gasto]");
 			Long idGasto = gastoRepository.persistir(gastoMapper.mapear(gastoDto));
 
 			logger.info("[02 - Mapeando resposta]");
 			gastoDto.setIdGasto(idGasto);
 			return gastoDto;
+		} catch (Exception e) {
+			logger.error(e.toString());
+			throw new ServicoException(e.getMessage());
+		}
 	}
 
 	@Override
 	public GastoEntradaDto alterar(final Long idGasto, final GastoEntradaDto gastoDto) {
-		logger.info("[01 - Validando se existe Gasto | idGasto: {}]", idGasto);
-		buscarPorId(idGasto);
+		try {
+			logger.info("[01 - Validando se existe Gasto | idGasto: {}]", idGasto);
+			recuperarGasto(idGasto);
 
-		logger.info("[02 - Atualizando Gasto | idGasto: {}]", idGasto);
-		gastoDto.setIdGasto(idGasto);
-		gastoRepository.atualizar(gastoMapper.mapear(gastoDto));
+			logger.info("[02 - Atualizando Gasto | idGasto: {}]", idGasto);
+			gastoDto.setIdGasto(idGasto);
+			gastoRepository.atualizar(gastoMapper.mapear(gastoDto));
 
-		return gastoDto;
+			return gastoDto;
+		} catch (OrganizadorFinanceiroException e) {
+			logger.error(e.toString());
+			throw e;
+		} catch (Exception e) {
+			logger.error(e.toString());
+			throw new ServicoException(e.getMessage());
+		}
 	}
 
 	@Override
 	public void delete(final Long idGasto) {
-		logger.info("[01 - Excluindo Gasto | idGasto: {}]", idGasto);
-		gastoRepository.delete(idGasto);
+		try {
+			logger.info("[01 - Excluindo Gasto | idGasto: {}]", idGasto);
+			gastoRepository.delete(idGasto);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			throw new ServicoException(e.getMessage());
+		}
 	}
 
 	@Override
 	public RelatorioGastoPorCategoriaDto gerarRelatorioGastoPorCategoria(final Long idPessoa, final LocalDate dtMin,
 			final LocalDate dtMax) {
+		try {
+			logger.info("[1.0] - Recuperando Pessoa");
+			final PessoaDto pessoaDto = pessoaService.buscarPorId(idPessoa);
 
-		logger.info("[1.0] - Recuperando Pessoa");
-		final PessoaDto pessoaDto = pessoaService.buscarPorId(idPessoa);
+			logger.info("[2.0] - Recuperando valores gastos por categoria");
+			final List<ValorGastoPorCategoriaDto> lsVlGastoPorCategoria = gastoRepository
+					.recuperarLsVlGastoPorCategoria(idPessoa, dtMin, dtMax);
 
-		logger.info("[2.0] - Recuperando valores gastos por categoria");
-		final List<ValorGastoPorCategoriaDto> lsVlGastoPorCategoria = gastoRepository
-				.recuperarLsVlGastoPorCategoria(idPessoa, dtMin, dtMax);
+			logger.info("[3.0] - Calculando valor total gasto no período");
+			BigDecimal vltGastoPeriodo = lsVlGastoPorCategoria.stream().map(vlGasto -> vlGasto.getVltGasto())
+					.reduce(BigDecimal.ZERO, BigDecimal::add);
 
-		logger.info("[3.0] - Calculando valor total gasto no período");
-		BigDecimal vltGastoPeriodo = lsVlGastoPorCategoria.stream().map(vlGasto -> vlGasto.getVltGasto())
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+			logger.info("[4.0] - Preenchendo lista de valores gastos por categoria");
+			preenchendoLsVlGastoPorCategoria(lsVlGastoPorCategoria, vltGastoPeriodo);
 
-		logger.info("[4.0] - Preenchendo lista de valores gastos por categoria");
-		preenchendoLsVlGastoPorCategoria(lsVlGastoPorCategoria, vltGastoPeriodo);
+			logger.info("[5.0] - Preenchendo Relatório");
+			final RelatorioGastoPorCategoriaDto relatorio = relatorioMapper.mapear(pessoaDto, dtMin, dtMax,
+					vltGastoPeriodo, lsVlGastoPorCategoria);
 
-		logger.info("[5.0] - Preenchendo Relatório");
-		final RelatorioGastoPorCategoriaDto relatorio = relatorioMapper.mapear(pessoaDto, dtMin, dtMax, vltGastoPeriodo,
-				lsVlGastoPorCategoria);
-
-		return relatorio;
+			return relatorio;
+		} catch (OrganizadorFinanceiroException e) {
+			logger.error(e.toString());
+			throw e;
+		} catch (Exception e) {
+			logger.error(e.toString());
+			throw new ServicoException(e.getMessage());
+		}
 	}
 
 	private void preenchendoLsVlGastoPorCategoria(List<ValorGastoPorCategoriaDto> lsVlGastoPorCategoria,
