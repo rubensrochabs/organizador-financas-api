@@ -22,7 +22,7 @@ import com.organizador_financas_api.repositories.PessoaRepository;
 @PropertySources({ @PropertySource("classpath:query/pessoa_escrita.properties"),
 		@PropertySource("classpath:query/pessoa_leitura.properties") })
 public class PessoaRepositoryImpl implements PessoaRepository {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Value("${SPS.TB_PESSOA}")
 	private String queryListarPessoas;
@@ -44,13 +44,13 @@ public class PessoaRepositoryImpl implements PessoaRepository {
 
 	@Override
 	public List<Pessoa> retornarLista() {
-		log.info("Início retornarLista Pessoa");
+		logger.info("Início retornarLista Pessoa");
 		return jdbcUtils.recuperar(queryListarPessoas, BeanPropertyRowMapper.newInstance(Pessoa.class));
 	}
 
 	@Override
 	public Optional<Pessoa> recuperar(final Long idPessoa) {
-		log.info("Início retornar Pessoa || idPessoa: {}", idPessoa);
+		logger.info("Início retornar Pessoa | idPessoa: {}", idPessoa);
 		final MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("idPessoa", idPessoa);
 
@@ -61,7 +61,7 @@ public class PessoaRepositoryImpl implements PessoaRepository {
 
 	@Override
 	public Pessoa persistir(final Pessoa pessoa) {
-		log.info("Início persistir Pessoa || pessoa: {}", pessoa);
+		logger.info("Início persistir Pessoa | pessoa: {}", pessoa);
 		final Long idPessoa = jdbcUtils.persistir(queryPersistirPessoa, new BeanPropertySqlParameterSource(pessoa));
 		pessoa.setIdPessoa(idPessoa);
 
@@ -70,13 +70,13 @@ public class PessoaRepositoryImpl implements PessoaRepository {
 
 	@Override
 	public void atualizar(final Pessoa pessoa) {
-		log.info("Início atualizar Pessoa || pessoa: {}", pessoa);
+		logger.info("Início atualizar Pessoa | pessoa: {}", pessoa);
 		jdbcUtils.atualizar(queryUpdatePessoa, new BeanPropertySqlParameterSource(pessoa));
 	}
 
 	@Override
 	public void delete(final Long idPessoa) {
-		log.info("Início delete Pessoa por id || idPessoa: {}", idPessoa);
+		logger.info("Início delete Pessoa por id | idPessoa: {}", idPessoa);
 		final MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("idPessoa", idPessoa);
 
