@@ -1,5 +1,7 @@
 package com.organizador_financas_api.model.dto;
 
+import java.util.Objects;
+
 public class PessoaDto {
 
 	private Long id;
@@ -23,6 +25,23 @@ public class PessoaDto {
 
 	public void setNmNome(String nmNome) {
 		this.nmNome = nmNome;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, nmNome);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PessoaDto other = (PessoaDto) obj;
+		return Objects.equals(id, other.id) && Objects.equals(nmNome, other.nmNome);
 	}
 
 	@Override

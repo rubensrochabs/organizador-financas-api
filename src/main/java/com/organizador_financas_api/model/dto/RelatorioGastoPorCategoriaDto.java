@@ -3,6 +3,7 @@ package com.organizador_financas_api.model.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class RelatorioGastoPorCategoriaDto {
 
@@ -63,6 +64,26 @@ public class RelatorioGastoPorCategoriaDto {
 
 	public void setLsGastoPorCategoria(List<ValorGastoPorCategoriaDto> lsGastoPorCategoria) {
 		this.lsGastoPorCategoria = lsGastoPorCategoria;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(dtMaxPeriodo, dtMinPeriodo, idPessoa, lsGastoPorCategoria, nmPessoa, vlTotalGasto);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RelatorioGastoPorCategoriaDto other = (RelatorioGastoPorCategoriaDto) obj;
+		return Objects.equals(dtMaxPeriodo, other.dtMaxPeriodo) && Objects.equals(dtMinPeriodo, other.dtMinPeriodo)
+				&& Objects.equals(idPessoa, other.idPessoa)
+				&& Objects.equals(lsGastoPorCategoria, other.lsGastoPorCategoria)
+				&& Objects.equals(nmPessoa, other.nmPessoa) && Objects.equals(vlTotalGasto, other.vlTotalGasto);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.organizador_financas_api.model.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -83,6 +84,21 @@ public class GastoSaidaDto {
 
 	public void setTxDescricao(String txDescricao) {
 		this.txDescricao = txDescricao;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GastoSaidaDto other = (GastoSaidaDto) obj;
+		return Objects.equals(dtEmissao, other.dtEmissao) && Objects.equals(idGasto, other.idGasto)
+				&& Objects.equals(idGastoCategoria, other.idGastoCategoria) && Objects.equals(idPessoa, other.idPessoa)
+				&& Objects.equals(nmGastoCategoria, other.nmGastoCategoria) && Objects.equals(nmPessoa, other.nmPessoa)
+				&& Objects.equals(nrValor, other.nrValor) && Objects.equals(txDescricao, other.txDescricao);
 	}
 
 	@Override

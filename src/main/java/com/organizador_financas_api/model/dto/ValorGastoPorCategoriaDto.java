@@ -1,6 +1,7 @@
 package com.organizador_financas_api.model.dto;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import com.organizador_financas_api.model.enums.GastoCategoriaEnum;
 
@@ -53,6 +54,25 @@ public class ValorGastoPorCategoriaDto {
 
 	public void setPercentualGasto(BigDecimal percentualGasto) {
 		this.percentualGasto = percentualGasto;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(idGastoCategoria, nmGastoCategoria, percentualGasto, vltGasto);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ValorGastoPorCategoriaDto other = (ValorGastoPorCategoriaDto) obj;
+		return Objects.equals(idGastoCategoria, other.idGastoCategoria)
+				&& Objects.equals(nmGastoCategoria, other.nmGastoCategoria)
+				&& Objects.equals(percentualGasto, other.percentualGasto) && Objects.equals(vltGasto, other.vltGasto);
 	}
 
 	@Override
