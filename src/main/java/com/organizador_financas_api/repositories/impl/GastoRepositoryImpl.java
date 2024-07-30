@@ -85,12 +85,11 @@ public class GastoRepositoryImpl implements GastoRepository {
 	}
 
 	@Override
-	public Gasto persistir(final Gasto gasto) {
+	public Long persistir(final Gasto gasto) {
 		logger.info("Início Persistir Gasto | gasto: {}", gasto);
 		Long idGasto = jdbcUtils.persistir(queryPersistirGasto, new BeanPropertySqlParameterSource(gasto));
-		gasto.setIdGasto(idGasto);
 
-		return gasto;
+		return idGasto;
 	}
 
 	@Override

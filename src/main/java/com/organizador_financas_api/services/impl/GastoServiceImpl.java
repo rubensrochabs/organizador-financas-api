@@ -75,11 +75,12 @@ public class GastoServiceImpl implements GastoService {
 
 	@Override
 	public GastoEntradaDto incluir(final GastoEntradaDto gastoDto) {
-		logger.info("[01 - Incluindo Gasto]");
-		Gasto retornoPessoa = gastoRepository.persistir(gastoMapper.mapear(gastoDto));
+			logger.info("[01 - Incluindo Gasto]");
+			Long idGasto = gastoRepository.persistir(gastoMapper.mapear(gastoDto));
 
-		logger.info("[02 - Mapeando resposta]");
-		return gastoMapper.mapear(retornoPessoa);
+			logger.info("[02 - Mapeando resposta]");
+			gastoDto.setIdGasto(idGasto);
+			return gastoDto;
 	}
 
 	@Override

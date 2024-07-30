@@ -18,7 +18,7 @@ public interface GastoRepository {
 
 	public List<ValorGastoPorCategoriaDto> recuperarLsVlGastoPorCategoria(Long idPessoa, LocalDate dtMin, LocalDate dtMax);
 
-	public Gasto persistir(Gasto gasto);
+	public Long persistir(Gasto gasto);
 	
 	public void atualizar(Gasto gasto);
 	
