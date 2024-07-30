@@ -58,7 +58,7 @@ public class GastoServiceImpl implements GastoService {
 		} catch (OrganizadorFinanceiroException e) {
 			logger.error(e.toString());
 			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
@@ -86,7 +86,7 @@ public class GastoServiceImpl implements GastoService {
 		} catch (OrganizadorFinanceiroException e) {
 			logger.error(e.toString());
 			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
@@ -101,7 +101,7 @@ public class GastoServiceImpl implements GastoService {
 			logger.info("[02 - Mapeando resposta]");
 			gastoDto.setIdGasto(idGasto);
 			return gastoDto;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
@@ -121,7 +121,7 @@ public class GastoServiceImpl implements GastoService {
 		} catch (OrganizadorFinanceiroException e) {
 			logger.error(e.toString());
 			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
@@ -132,7 +132,7 @@ public class GastoServiceImpl implements GastoService {
 		try {
 			logger.info("[01 - Excluindo Gasto | idGasto: {}]", idGasto);
 			gastoRepository.delete(idGasto);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
@@ -164,7 +164,7 @@ public class GastoServiceImpl implements GastoService {
 		} catch (OrganizadorFinanceiroException e) {
 			logger.error(e.toString());
 			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
