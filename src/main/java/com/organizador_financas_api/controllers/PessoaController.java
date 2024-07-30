@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.organizador_financas_api.model.dto.PessoaDto;
-import com.organizador_financas_api.model.dto.StandardResponse;
 import com.organizador_financas_api.services.PessoaService;
-import com.organizador_financas_api.utils.StandardController;
 
 @RestController
 @RequestMapping(value = "/pessoa")
