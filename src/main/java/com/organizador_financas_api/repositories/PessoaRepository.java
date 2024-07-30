@@ -14,7 +14,7 @@ public interface PessoaRepository {
 	
 	public Optional<Pessoa> recuperar(Long idPessoa);
 
-	public Pessoa persistir(Pessoa pessoa);
+	public Long persistir(Pessoa pessoa);
 	
 	public void atualizar(Pessoa pessoa);
 	

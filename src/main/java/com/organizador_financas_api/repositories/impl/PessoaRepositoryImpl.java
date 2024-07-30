@@ -60,12 +60,9 @@ public class PessoaRepositoryImpl implements PessoaRepository {
 	}
 
 	@Override
-	public Pessoa persistir(final Pessoa pessoa) {
+	public Long persistir(final Pessoa pessoa) {
 		logger.info("Início persistir Pessoa | pessoa: {}", pessoa);
-		final Long idPessoa = jdbcUtils.persistir(queryPersistirPessoa, new BeanPropertySqlParameterSource(pessoa));
-		pessoa.setIdPessoa(idPessoa);
-
-		return pessoa;
+		return jdbcUtils.persistir(queryPersistirPessoa, new BeanPropertySqlParameterSource(pessoa));
 	}
 
 	@Override

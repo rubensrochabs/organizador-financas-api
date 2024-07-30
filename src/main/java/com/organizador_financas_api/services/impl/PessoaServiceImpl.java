@@ -32,13 +32,10 @@ public class PessoaServiceImpl implements PessoaService {
 		try {
 			logger.info("[1.0] - Recuperando lista de pessoas");
 			List<PessoaDto> lsPessoaDto = pessoaRepository.retornarLista().stream()
-					.map(pessoa -> pessoaMapper.mapearEntidadeParaDto(pessoa)).collect(Collectors.toList());
+					.map(pessoa -> pessoaMapper.mapear(pessoa)).collect(Collectors.toList());
 
 			return lsPessoaDto;
-		} catch (OrganizadorFinanceiroException e) {
-			logger.error(e.toString());
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
@@ -50,11 +47,11 @@ public class PessoaServiceImpl implements PessoaService {
 			logger.info("[1.0] - Recuperando pessoa | idPessoa: {}", id);
 			Pessoa pessoa = recuperarPessoa(id);
 
-			return pessoaMapper.mapearEntidadeParaDto(pessoa);
+			return pessoaMapper.mapear(pessoa);
 		} catch (OrganizadorFinanceiroException e) {
 			logger.error(e.toString());
 			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
@@ -64,14 +61,13 @@ public class PessoaServiceImpl implements PessoaService {
 	public PessoaDto incluir(final PessoaDto pessoaDto) {
 		try {
 			logger.info("[1.0] - Incluindo Pessoa");
-			Pessoa pessoa = pessoaMapper.mapearDtoParaEntidade(pessoaDto);
-			PessoaDto retornoPessoa = pessoaMapper.mapearEntidadeParaDto(pessoaRepository.persistir(pessoa));
+			Pessoa pessoa = pessoaMapper.mapear(pessoaDto);
+			Long idPessoa = pessoaRepository.persistir(pessoa);
+			pessoa.setIdPessoa(idPessoa);
+			PessoaDto retornoPessoa = pessoaMapper.mapear(pessoa);
 
 			return retornoPessoa;
-		} catch (OrganizadorFinanceiroException e) {
-			logger.error(e.toString());
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
@@ -85,14 +81,14 @@ public class PessoaServiceImpl implements PessoaService {
 
 			logger.info("[2.0] - Atualizando Pessoa | PessoaDto: {}]", pessoaDto);
 			pessoaDto.setId(id);
-			final Pessoa pessoaAtualizada = pessoaMapper.mapearDtoParaEntidade(pessoaDto);
+			final Pessoa pessoaAtualizada = pessoaMapper.mapear(pessoaDto);
 			pessoaRepository.atualizar(pessoaAtualizada);
 
-			return pessoaMapper.mapearEntidadeParaDto(pessoaAtualizada);
+			return pessoaMapper.mapear(pessoaAtualizada);
 		} catch (OrganizadorFinanceiroException e) {
 			logger.error(e.toString());
 			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
@@ -109,7 +105,7 @@ public class PessoaServiceImpl implements PessoaService {
 		} catch (OrganizadorFinanceiroException e) {
 			logger.error(e.toString());
 			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			logger.error(e.toString());
 			throw new ServicoException(e.getMessage());
 		}
