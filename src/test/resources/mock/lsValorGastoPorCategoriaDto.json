@@ -1,0 +1,20 @@
+[
+	{
+		"idGastoCategoria": 1,
+		"nmGastoCategoria": null,
+		"vltGasto": 250.73,
+		"percentualGasto": null
+	},
+	{
+		"idGastoCategoria": 2,
+		"nmGastoCategoria": null,
+		"vltGasto": 250.49,
+		"percentualGasto": null
+	},
+	{
+		"idGastoCategoria": 3,
+		"nmGastoCategoria": null,
+		"vltGasto": 60.15,
+		"percentualGasto": null
+	}
+]

@@ -1,0 +1,51 @@
+{
+	"idPessoa": 1,
+	"nmPessoa": "João Silva",
+	"dtMinPeriodo": "2023-07-01",
+	"dtMaxPeriodo": "2023-07-31",
+	"vlTotalGasto": 561.37,
+	"lsGastoPorCategoria": [
+		{
+			"idGastoCategoria": 1,
+			"nmGastoCategoria": "Conta",
+			"vltGasto": 250.73,
+			"percentualGasto": 44.67
+		},
+		{
+			"idGastoCategoria": 2,
+			"nmGastoCategoria": "Alimentação",
+			"vltGasto": 250.49,
+			"percentualGasto": 44.62
+		},
+		{
+			"idGastoCategoria": 3,
+			"nmGastoCategoria": "Transporte",
+			"vltGasto": 60.15,
+			"percentualGasto": 10.71
+		},
+		{
+			"idGastoCategoria": 4,
+			"nmGastoCategoria": "Saúde",
+			"vltGasto": 0,
+			"percentualGasto": 0
+		},
+		{
+			"idGastoCategoria": 5,
+			"nmGastoCategoria": "Lazer",
+			"vltGasto": 0,
+			"percentualGasto": 0
+		},
+		{
+			"idGastoCategoria": 6,
+			"nmGastoCategoria": "Pets",
+			"vltGasto": 0,
+			"percentualGasto": 0
+		},
+		{
+			"idGastoCategoria": 7,
+			"nmGastoCategoria": "Outros",
+			"vltGasto": 0,
+			"percentualGasto": 0
+		}
+	]
+}

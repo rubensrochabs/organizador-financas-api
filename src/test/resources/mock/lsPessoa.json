@@ -1,0 +1,22 @@
+[
+	{
+		"idPessoa": 1,
+		"nmNome": "João Silva"
+	},
+	{
+		"idPessoa": 2,
+		"nmNome": "José de Souza"
+	},
+	{
+		"idPessoa": 3,
+		"nmNome": "Maria Oliveira"
+	},
+	{
+		"idPessoa": 4,
+		"nmNome": "Antônio Oliveira"
+	},
+	{
+		"idPessoa": 8,
+		"nmNome": "Lúcio Arantes"
+	}
+]

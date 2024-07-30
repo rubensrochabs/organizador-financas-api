@@ -1,0 +1,42 @@
+[
+	{
+		"idGasto": 13,
+		"idPessoa": 1,
+		"nmPessoa": "João Silva",
+		"idGastoCategoria": 1,
+		"nmGastoCategoria": "Conta",
+		"dtEmissao": "2023-07-01",
+		"nrValor": 150.73,
+		"txDescricao": "Pagamento de conta de luz"
+	},
+	{
+		"idGasto": 14,
+		"idPessoa": 1,
+		"nmPessoa": "João Silva",
+		"idGastoCategoria": 2,
+		"nmGastoCategoria": "Alimentação",
+		"dtEmissao": "2023-07-05",
+		"nrValor": 250.49,
+		"txDescricao": "Compras no supermercado"
+	},
+	{
+		"idGasto": 15,
+		"idPessoa": 1,
+		"nmPessoa": "João Silva",
+		"idGastoCategoria": 3,
+		"nmGastoCategoria": "Transporte",
+		"dtEmissao": "2023-07-10",
+		"nrValor": 60.15,
+		"txDescricao": "Passagem de ônibus"
+	},
+	{
+		"idGasto": 35,
+		"idPessoa": 1,
+		"nmPessoa": "João Silva",
+		"idGastoCategoria": 1,
+		"nmGastoCategoria": "Conta",
+		"dtEmissao": "2023-07-05",
+		"nrValor": 100.00,
+		"txDescricao": "Pagamento de conta de internet"
+	}
+]

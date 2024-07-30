@@ -1,0 +1,10 @@
+{
+	"idGasto": 13,
+	"idPessoa": 1,
+	"nmPessoa": "João Silva",
+	"idGastoCategoria": 1,
+	"nmGastoCategoria": "Conta",
+	"dtEmissao": "2023-07-01",
+	"nrValor": 150.73,
+	"txDescricao": "Pagamento de conta de luz"
+}
