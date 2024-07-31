@@ -1,0 +1,344 @@
+{
+	"info": {
+		"_postman_id": "dbf413f6-5f12-4cc3-9174-17ef0c5db928",
+		"name": "Organizador Financeiro API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24402299"
+	},
+	"item": [
+		{
+			"name": "Pessoa",
+			"item": [
+				{
+					"name": "Listar Pessoas",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pessoa",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pessoa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar Pessoa por ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pessoa/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pessoa",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incluir Pessoa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nmNome\": \"Godofredo Stradvarius\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pessoa",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pessoa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Pessoa",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nmNome\": \"Lúcio Nogueira\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pessoa/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pessoa",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Pessoa por ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pessoa/5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pessoa",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gasto",
+			"item": [
+				{
+					"name": "Consultar Gasto por ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/gasto/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"gasto",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Gasto por idPessoa",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/gasto?idPessoa=1&dtMin=2023-07-01&dtMax=2023-07-31",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"gasto"
+							],
+							"query": [
+								{
+									"key": "idPessoa",
+									"value": "1",
+									"description": "ID da pessoa referente ao gasto"
+								},
+								{
+									"key": "dtMin",
+									"value": "2023-07-01",
+									"description": "Data mínima do intevalo no formato 'yyyy-MM-dd'"
+								},
+								{
+									"key": "dtMax",
+									"value": "2023-07-31",
+									"description": "Data máxima do intevalo no formato 'yyyy-MM-dd'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gerar Relatório de gasto por categoria",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/gasto/relatorio?idPessoa=1&dtMin=2023-07-01&dtMax=2023-07-31",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"gasto",
+								"relatorio"
+							],
+							"query": [
+								{
+									"key": "idPessoa",
+									"value": "1",
+									"description": "ID da pessoa referente ao gasto"
+								},
+								{
+									"key": "dtMin",
+									"value": "2023-07-01",
+									"description": "Data mínima do intevalo no formato 'yyyy-MM-dd'"
+								},
+								{
+									"key": "dtMax",
+									"value": "2023-07-31",
+									"description": "Data máxima do intevalo no formato 'yyyy-MM-dd'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incluir Gasto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idPessoa\": 1,\r\n    \"idGastoCategoria\": 1,\r\n    \"dtEmissao\": \"2023-07-05\",\r\n    \"nrValor\": 100.00,\r\n    \"txDescricao\": \"Pagamento de conta de internet\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/gasto",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"gasto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Gasto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idPessoa\": 1,\r\n    \"idGastoCategoria\": 1,\r\n    \"dtEmissao\": \"2023-07-06\",\r\n    \"nrValor\": 100.50,\r\n    \"txDescricao\": \"Pagamento de conta de internet\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/gasto/21",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"gasto",
+								"21"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Gasto por ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/gasto/21",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"gasto",
+								"21"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
